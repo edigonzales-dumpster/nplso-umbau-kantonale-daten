@@ -1,0 +1,10 @@
+# ---> OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# gradle
+gretl/init-environment/gradle.properties
+*/*/gradle.properties
+gradle.properties
+.gradle
