@@ -1,0 +1,144 @@
+buildscript {
+	repositories {
+
+		maven {
+			url "http://download.osgeo.org/webdav/geotools/"
+		}
+		maven {
+			url "http://maven.geo-solutions.it/"
+		}
+		maven {
+			url "https://artifacts.unidata.ucar.edu/content/repositories/unidata/"
+		}			
+		maven {
+			url "https://github.com/ElectronicChartCentre/ecc-mvn-repo/raw/master/releases"
+		}	
+		maven {
+			url "http://repo.boundlessgeo.com/main"
+			//url "http://sogeo.services:8081/artifactory/boundless-main"
+		}		
+		mavenCentral()		
+		maven { 
+			name "AGI gretl repository"
+			url gretlRepoUrl
+			credentials {
+				username gretlRepoReaderName
+				password gretlRepoReaderPass
+			}	
+		}
+	}
+	dependencies {
+		classpath("ch.so.agi:gretl:1.0.0")
+		classpath("org.geoscript:geoscript-groovy:1.9.0") {
+			exclude(module: 'commons-beanutils') // https://github.com/gradle/gradle/issues/1851
+		}
+	}
+}
+
+group = 'ch.so.agi.gretl'
+version = '0.0.1'
+
+description = """\n
+Gradle-Projekt für Initialisierung der
+Entwicklungsumgebung für Gewässerschutz-
+NPLSO-Datenumbau in einer Entwicklungs-
+Datenbank.
+
+------------------------------------------
+Project version: ${version}
+Gradle version: ${gradle.gradleVersion}
+------------------------------------------
+"""
+
+ext {
+    setPropertyDefault('dbHost', 'geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com')
+    setPropertyDefault('dbPort', '5432')
+    setPropertyDefault('dbDatabase', 'xanadu2')
+    setPropertyDefault('dbUsr', 'stefan')
+    setPropertyDefault('dbPwd', 'xxxx')
+    setPropertyDefault('dbSchema', 'test1')
+    setPropertyDefault('modelName', 'DM01AVSO24LV95')
+}
+
+
+import geoscript.geom.*
+import geoscript.workspace.PostGIS
+import geoscript.layer.Shapefile
+import geoscript.proj.Projection
+
+task setupPgExt(type: ch.so.agi.gretl.steps.SqlExecutorTask) {
+	description 'Creates postgis and uuid extension in database.'
+
+    database = ['jdbc:postgresql://'+dbHost+':'+dbPort+'/'+dbDatabase, dbUsr, dbPwd]
+    sqlFiles = ['sql/createExtensions.sql']
+}
+
+
+task createGwsSchema(type: ch.so.agi.gretl.steps.SqlExecutorTask) {
+	description 'Creates empty schema for gws shapefile import.'
+
+    database = ['jdbc:postgresql://'+dbHost+':'+dbPort+'/'+dbDatabase, dbUsr, dbPwd]
+    sqlFiles = ['sql/createGwsSchema.sql']
+}
+
+
+task importGwsShapefile() {
+	description 'Copy gws shapefile into aws database. Needs to be deleted manually if exists.'
+
+	doLast {
+		Shapefile shp = new Shapefile('data/gws/public_aww_gszoar.shp')
+		println shp.getCount()
+
+ 		Projection p = new Projection("EPSG:2056")
+		shp.setProj(p)
+
+		PostGIS postgis = new PostGIS(dbDatabase, dbHost, dbPort, "afu_gws", dbUsr, dbPwd)
+		println postgis.getLayers()
+
+		//postgis.add(shp)
+		postgis.close()
+	}
+}
+
+
+task createGemgreSchema(type: ch.so.agi.gretl.steps.SqlExecutorTask) {
+	description 'Creates empty schema for gemeindegrenze shapefile import.'
+
+    database = ['jdbc:postgresql://'+dbHost+':'+dbPort+'/'+dbDatabase, dbUsr, dbPwd]
+    sqlFiles = ['sql/createGemgreSchema.sql']
+}
+
+
+task importGemgreShapefile() {
+	description 'Copy gemeindegrenze shapefile into aws database. Needs to be deleted manually if exists.'
+
+	doLast {
+		Shapefile shp = new Shapefile('data/gemgre/gemeindegrenze.shp')
+		println shp.getCount()
+
+ 		Projection p = new Projection("EPSG:2056")
+		shp.setProj(p)
+
+		PostGIS postgis = new PostGIS(dbDatabase, dbHost, dbPort, "agi_gemgre", dbUsr, dbPwd)
+		println postgis.getLayers()
+
+		postgis.add(shp)
+		postgis.close()
+	}
+}
+
+
+task createNplsoSchema() {
+	description 'Create nplso schema and empty tables with ili2pg for data conversion.'
+	
+	doLast {
+		println "fubar"
+	}
+}
+
+
+def setPropertyDefault(propertyName, defaultValue) {
+    if (!project.hasProperty(propertyName)) {
+        ext[propertyName] = defaultValue
+    }
+}
