@@ -1,0 +1,33 @@
+593    Grundwasserschutzzone S1    5930    Grundwasserschutzzone S1    orientierend
+594    Grundwasserschutzzone S2    5940    Grundwasserschutzzone S2    orientierend
+595    Grundwasserschutzzone S3    5950    Grundwasserschutzzone S3    orientierend
+596    Grundwasserschutzareal    5960    Grundwasserschutzareal    orientierend
+
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (typ_kt, code_kommunal, bezeichnung, verbindlichkeit)
+	VALUES ('N593_Grundwasserschutzzone_S1', '5930', 'Grundwasserschutzzone S1', 'orientierend')		
+
+
+/*
+,
+typ_flaeche AS (
+
+
+
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (typ_kt, code_kommunal, bezeichnung, verbindlichkeit)
+	VALUES ('N593_Grundwasserschutzzone_S1', '5930', 'Grundwasserschutzzone S1', 'orientierend')		
+
+)
+*/
+
+
+	t_basket int8 NOT NULL,
+	t_datasetname varchar(200) NOT NULL,
+	t_ili_tid uuid NULL DEFAULT uuid_generate_v4(),
+	typ_kt varchar(255) NULL,
+	code_kommunal varchar(12) NULL,
+	bezeichnung varchar(80) NULL,
+	abkuerzung varchar(12) NULL,
+	verbindlichkeit varchar(255) NULL,
+	bemerkungen varchar(240) NULL,
+
+
