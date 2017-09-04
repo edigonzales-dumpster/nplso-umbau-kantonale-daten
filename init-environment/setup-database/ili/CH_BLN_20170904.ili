@@ -1,0 +1,28 @@
+INTERLIS 2.3;
+
+!!@ IDGeoIV=18.1
+!!@ technicalContact=mailto:gis@bafu.admin.ch
+!!@ furtherInformation=http://www.bafu.admin.ch/geodatenmodelle
+!! LV95 version for internal use in canton Solothurn.
+!! TODO: some more header infos...
+MODEL CH_BLN_20170904 (en)
+AT "http://models.geo.admin.ch/BAFU"
+VERSION "2017-09-04"  =
+  IMPORTS GeometryCHLV95_V1,Units;
+
+  TOPIC BLN =
+    OID AS INTERLIS.UUIDOID;
+
+    CLASS BLN =
+      ObjNummer : MANDATORY TEXT;
+      Name : MANDATORY TEXT*255;
+      RefObjBlatt : INTERLIS.URI;
+      Inkraftsetzungsdatum : MANDATORY INTERLIS.XMLDate;
+      Mutationsdatum : INTERLIS.XMLDate;
+      Mutationsgrund_Text : TEXT*1024;
+      Geo_Obj : MANDATORY GeometryCHLV95_V1.MultiSurface;
+    END BLN;
+
+  END BLN;
+
+END CH_BLN_20170904.

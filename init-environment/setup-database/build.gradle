@@ -59,8 +59,8 @@ ext {
     setPropertyDefault('dbDatabase', 'xanadu2')
     setPropertyDefault('dbUsr', 'stefan')
     setPropertyDefault('dbPwd', 'xxxx')
-    setPropertyDefault('dbSchema', 'arp_npl_export')
-    setPropertyDefault('modelName', 'SO_Nutzungsplanung_20170901')
+    //setPropertyDefault('dbSchema', 'arp_npl_export')
+    //setPropertyDefault('modelName', 'SO_Nutzungsplanung_20170901')
 }
 
 
@@ -171,8 +171,54 @@ task createNplsoSchema() {
         config.setDburl("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbDatabase)
 
 		config.setConfigReadFromDb(false)
-        config.setModels(modelName)
-		config.setDbschema(dbSchema)
+        config.setModels("SO_Nutzungsplanung_20170901")
+		config.setDbschema("arp_npl_export")
+        Ili2db.runSchemaImport(config, "")
+	}
+}
+
+
+task createBlnSchema() {
+	description 'Create bln schema and empty tables with ili2pg for copying from shapefile and improving geometries.'
+	
+	doLast {
+		def config = new Config()
+        config.setModeldir(ch.interlis.ili2c.Main.ILI_REPOSITORY+ch.interlis.ili2c.Main.ILIDIR_SEPARATOR+"ili/")
+        config.setDefaultSrsAuthority("EPSG")
+        config.setDefaultSrsCode("2056")
+        config.setMaxSqlNameLength(Integer.toString(NameMapping.DEFAULT_NAME_LENGTH))
+        config.setIdGenerator(ch.ehi.ili2db.base.TableBasedIdGen.class.getName())
+        config.setInheritanceTrafo(config.INHERITANCE_TRAFO_SMART1)
+		config.setMultilingualTrafo(config.MULTILINGUAL_TRAFO_EXPAND)
+		config.setMultiSurfaceTrafo(config.MULTISURFACE_TRAFO_COALESCE)
+        config.setValidation(false)
+		config.setStrokeArcs(config.STROKE_ARCS_ENABLE);
+        config.setCreateFkIdx(config.CREATE_FKIDX_YES)
+        config.setValue(SqlConfiguration.CREATE_GEOM_INDEX,"True")
+        //config.setSqlNull(config.SQL_NULL_ENABLE)
+        config.setCreateFk(config.CREATE_FK_YES)
+		config.setCreateUniqueConstraints(true)
+		config.setCreateNumChecks(true)
+		config.setCreateEnumDefs(config.CREATE_ENUM_DEFS_MULTI)
+		//config.setBasketHandling(config.BASKET_HANDLING_READWRITE)
+        //config.setCreateDatasetCols(config.CREATE_DATASET_COL)
+        //config.setTidHandling(config.TID_HANDLING_PROPERTY)
+        config.setNameOptimization(config.NAME_OPTIMIZATION_TOPIC)
+        config.setGeometryConverter(ch.ehi.ili2pg.converter.PostgisColumnConverter.class.getName())
+        config.setDdlGenerator(ch.ehi.sqlgen.generator_impl.jdbc.GeneratorPostgresql.class.getName())
+        config.setJdbcDriver("org.postgresql.Driver")
+        config.setIdGenerator(ch.ehi.ili2pg.PgSequenceBasedIdGen.class.getName())
+        config.setUuidDefaultValue("uuid_generate_v4()")
+        config.setDbhost(dbHost)
+        config.setDbdatabase(dbDatabase)
+        config.setDbport(dbPort)
+        config.setDbusr(dbUsr)
+        config.setDbpwd(dbPwd)
+        config.setDburl("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbDatabase)
+
+		config.setConfigReadFromDb(false)
+        config.setModels("CH_BLN_20170904")
+		config.setDbschema("arp_bln")
         Ili2db.runSchemaImport(config, "")
 	}
 }
