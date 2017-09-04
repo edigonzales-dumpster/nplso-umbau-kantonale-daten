@@ -10,3 +10,6 @@ xmllint --format rohr_export.xtf -o rohr_export.xtf
 
 
 
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --disableValidation --models SO_Nutzungsplanung_20170105 --dbschema arp_npl_export --dataset 2502 --export wisen_export.xtf
+
+
