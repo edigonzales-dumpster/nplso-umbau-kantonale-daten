@@ -60,7 +60,7 @@ ext {
     setPropertyDefault('dbUsr', 'stefan')
     setPropertyDefault('dbPwd', 'xxxx')
     setPropertyDefault('dbSchema', 'arp_npl_export')
-    setPropertyDefault('modelName', 'SO_Nutzungsplanung_20170105')
+    setPropertyDefault('modelName', 'SO_Nutzungsplanung_20170901')
 }
 
 
@@ -143,7 +143,7 @@ task createNplsoSchema() {
 	doLast {
 		println "fubar"
 		def config = new Config()
-        config.setModeldir(ch.interlis.ili2c.Main.ILI_REPOSITORY)
+        config.setModeldir(ch.interlis.ili2c.Main.ILI_REPOSITORY+ch.interlis.ili2c.Main.ILIDIR_SEPARATOR+"ili/")
         config.setDefaultSrsAuthority("EPSG")
         config.setDefaultSrsCode("2056")
         config.setMaxSqlNameLength(Integer.toString(NameMapping.DEFAULT_NAME_LENGTH))
