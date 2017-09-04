@@ -150,6 +150,7 @@ task createNplsoSchema() {
         config.setIdGenerator(ch.ehi.ili2db.base.TableBasedIdGen.class.getName())
         config.setInheritanceTrafo(config.INHERITANCE_TRAFO_SMART1)
         config.setValidation(false)
+		config.setStrokeArcs(config.STROKE_ARCS_ENABLE);
         config.setCreateFkIdx(config.CREATE_FKIDX_YES)
         config.setValue(SqlConfiguration.CREATE_GEOM_INDEX,"True")
         config.setSqlNull(config.SQL_NULL_ENABLE)

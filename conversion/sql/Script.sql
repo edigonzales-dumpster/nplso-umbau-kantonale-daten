@@ -1,22 +1,5 @@
-/*
-SELECT 
-    --gs.fid, gem.bfs_gemein, gem.the_geom, gs.the_geom, gs."zone"
-    count(*)
-FROM
-    agi_gemgre.gemeindegrenze AS gem, 
-    afu_gws.public_aww_gszoar AS gs
---WHERE ST_Intersects(gem.the_geom, gs.the_geom)
---WHERE ST_ContainsProperly(gem.the_geom, gs.the_geom)
---WHERE ST_Intersects(gem.the_geom, gs.the_geom)
-WHERE ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
---AND NOT ST_Touches(gem.the_geom, gs.the_geom)
---ORDER BY gs.fid;
-    
-
--- Am sinnvollsten? kleiner minus buffer und INTERSECT -> dann ist die Aussage relativ belastbar. 792 vs 763 vs. 665 (original)
-*/
-
--- So noch nicht definitive Lösung.
+-- Löschen: So noch nicht definitive Lösung.
+-- Sinnvolle Initialisierung überlegen.
 DELETE FROM
 	arp_npl_export.t_ili2db_dataset;
 
@@ -26,6 +9,9 @@ DELETE FROM
 DELETE FROM 
 	arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche;
 
+DELETE FROM 
+	arp_npl_export.nutzungsplanung_ueberlagernd_flaeche;
+	
 WITH datasets AS (
 	INSERT INTO arp_npl_export.t_ili2db_dataset (t_id, datasetname)
 	SELECT 
@@ -46,9 +32,7 @@ baskets_nutzungsplanung AS (
 		datasets
 	RETURNING *
 ),
-
-
--- alle Gemeinden _mit_ Typ 593
+-- alle Gemeinden _mit_ Typ xxx
 -- Geht so eigentlich nicht mehr ganz auf:
 -- code_kommunal ist UNIQUE. Wenn man aber mit datasets arbeitet,
 -- werden zwangsläufig gleiche code_kommunal-Werte vorhanden sein.
@@ -66,11 +50,11 @@ typ_593 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname, 'foo' AS bar
+		    DISTINCT gem.bfs_gemein::varchar AS datasetname
 		FROM
 		    agi_gemgre.gemeindegrenze AS gem, 
 		    afu_gws.public_aww_gszoar AS gs
-		WHERE gs."zone" = 'GZ1' 
+		WHERE (gs."zone" = 'GZ1' OR gs."zone" = 'GZ1B')
 		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
 		ORDER BY datasetname
 	) AS typen,
@@ -94,11 +78,11 @@ typ_594 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname, 'foo' AS bar
+		    DISTINCT gem.bfs_gemein::varchar AS datasetname
 		FROM
 		    agi_gemgre.gemeindegrenze AS gem, 
 		    afu_gws.public_aww_gszoar AS gs
-		WHERE gs."zone" = 'GZ2' 
+		WHERE (gs."zone" = 'GZ2' OR gs."zone" = 'GZ2B')
 		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
 		ORDER BY datasetname
 	) AS typen,
@@ -107,12 +91,151 @@ typ_594 AS (
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
+),
+typ_595 AS (
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
+	SELECT 	
+		baskets_nutzungsplanung.t_id AS t_basket,
+		datasets.datasetname AS t_datasetname,
+		uuid_generate_v4() AS t_ili_tid,
+		'N595_Grundwasserschutzzone_S3' AS typ_kt, 
+		'5950' AS code_kommunal,
+		'Grundwasserschutzzone S3' AS bezeichnung, 
+		'GRSZ3' AS abkuerzung,
+		'orientierend' AS verbindlichkeit
+	FROM
+	(
+		SELECT 
+		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		FROM
+		    agi_gemgre.gemeindegrenze AS gem, 
+		    afu_gws.public_aww_gszoar AS gs
+		WHERE (gs."zone" = 'GZ3' OR gs."zone" = 'GZ3B')
+		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		ORDER BY datasetname
+	) AS typen,
+	datasets,
+	baskets_nutzungsplanung
+	WHERE typen.datasetname = datasets.datasetname
+	AND baskets_nutzungsplanung.dataset = datasets.t_id
+	RETURNING *
+),
+typ_596 AS (
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
+	SELECT 	
+		baskets_nutzungsplanung.t_id AS t_basket,
+		datasets.datasetname AS t_datasetname,
+		uuid_generate_v4() AS t_ili_tid,
+		'N596_Grundwasserschutzareal' AS typ_kt, 
+		'5960' AS code_kommunal,
+		'Grundwasserschutzareal' AS bezeichnung, 
+		'GRSA' AS abkuerzung,
+		'orientierend' AS verbindlichkeit
+	FROM
+	(
+		SELECT 
+		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		FROM
+		    agi_gemgre.gemeindegrenze AS gem, 
+		    afu_gws.public_aww_gszoar AS gs
+		WHERE gs."zone" = 'SARE' 
+		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		ORDER BY datasetname
+	) AS typen,
+	datasets,
+	baskets_nutzungsplanung
+	WHERE typen.datasetname = datasets.datasetname
+	AND baskets_nutzungsplanung.dataset = datasets.t_id
+	RETURNING *
+),
+geometrie_593 AS (
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
+		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
+	SELECT 
+		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+	FROM (		
+		SELECT 
+		   	typ_593.t_basket AS t_basket,
+			gem.bfs_gemein::varchar AS t_databasename,
+			uuid_generate_v4() AS t_ili_tid,
+		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
+		   	'inKraft' AS rechtsstatus,
+		   	rrb_date AS publiziertab,
+		   	'AFU' AS erfasser,
+		   	new_date AS datum,
+		   	typ_593.t_id AS typ_ueberlagernd_flaeche,
+			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+		FROM
+		    agi_gemgre.gemeindegrenze AS gem, 
+		    afu_gws.public_aww_gszoar AS gs,
+		    typ_593
+		WHERE (gs."zone" = 'GZ1' OR gs."zone" = 'GZ1B')
+		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND typ_593.t_datasetname = gem.bfs_gemein::varchar
+	) AS foo
+	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
+	RETURNING *
+),
+geometrie_594 AS (
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
+		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
+	SELECT 
+		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+	FROM (
+		SELECT 
+		   	typ_594.t_basket AS t_basket,
+			gem.bfs_gemein::varchar AS t_databasename,
+			uuid_generate_v4() AS t_ili_tid,
+		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
+		   	'inKraft' AS rechtsstatus,
+		   	rrb_date AS publiziertab,
+		   	'AFU' AS erfasser,
+		   	new_date AS datum,
+		   	typ_594.t_id AS typ_ueberlagernd_flaeche,
+			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+		FROM
+		    agi_gemgre.gemeindegrenze AS gem, 
+		    afu_gws.public_aww_gszoar AS gs,
+		    typ_594
+		WHERE (gs."zone" = 'GZ2' OR gs."zone" = 'GZ2B')
+		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND typ_594.t_datasetname = gem.bfs_gemein::varchar
+	) AS foo
+	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
+	RETURNING *
+),
+geometrie_595 AS (
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
+		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
+	SELECT 
+		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+	FROM (
+		SELECT 
+		   	typ_595.t_basket AS t_basket,
+			gem.bfs_gemein::varchar AS t_databasename,
+			uuid_generate_v4() AS t_ili_tid,
+		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
+		   	'inKraft' AS rechtsstatus,
+		   	rrb_date AS publiziertab,
+		   	'AFU' AS erfasser,
+		   	new_date AS datum,
+		   	typ_595.t_id AS typ_ueberlagernd_flaeche,
+			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+		FROM
+	    	agi_gemgre.gemeindegrenze AS gem, 
+		    	afu_gws.public_aww_gszoar AS gs,
+		    typ_595
+		WHERE (gs."zone" = 'GZ3' OR gs."zone" = 'GZ3B')
+		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND typ_595.t_datasetname = gem.bfs_gemein::varchar
+	) AS foo
+	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
+	RETURNING *
 )
-
 SELECT 
 	*
 FROM
-	typ_594;
+	geometrie_595;
 	
 	
 

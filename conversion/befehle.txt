@@ -19,6 +19,10 @@ java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-cent
 xmllint --format wisen_export.xtf -o wisen_export.xtf
 
 
+java -jar ~/apps/ilivalidator-1.4.0/ilivalidator.jar wisen_export.xtf
+
+
+
 
 
 
