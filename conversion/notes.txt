@@ -33,3 +33,9 @@ typ_flaeche AS (
 
 
  inKraft	Attribut: rrb_date		AFU	wkb_geometry	Attribut: new_date
+
+
+
+ 520	BLN Gebiet	5200	BLN Gebiet	hinweisend
+
+ inKraft	Attribut: pub_date	Attribut: obj_nr & ' ' & name	ARP	siehe shape (Multipolygon)	Erfassungsdatum
