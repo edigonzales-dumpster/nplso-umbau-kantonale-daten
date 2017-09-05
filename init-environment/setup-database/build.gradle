@@ -224,6 +224,52 @@ task createBlnSchema() {
 }
 
 
+task createAdagisSchema(type: ch.so.agi.gretl.steps.SqlExecutorTask) {
+	description 'Creates empty schema for adagis shapefile import.'
+
+    database = ['jdbc:postgresql://'+dbHost+':'+dbPort+'/'+dbDatabase, dbUsr, dbPwd]
+    sqlFiles = ['sql/createAdagisSchema.sql']
+}
+
+
+task importAdagisPointShapefile() {
+	description 'Copy adagis punktfundstellen shapefile into aws database. Needs to be deleted manually if exists.'
+
+	doLast {
+		Shapefile shp = new Shapefile('data/adagis/punktfundstellen.shp')
+		println shp.getCount()
+
+ 		Projection p = new Projection("EPSG:2056")
+		shp.setProj(p)
+
+		PostGIS postgis = new PostGIS(dbDatabase, dbHost, dbPort, "ada_adagis_a", dbUsr, dbPwd)
+		println postgis.getLayers()
+
+		postgis.add(shp)
+		postgis.close()
+	}
+}
+
+
+task importAdagisAreaShapefile() {
+	description 'Copy adagis flaechenfundstellen shapefile into aws database. Needs to be deleted manually if exists.'
+
+	doLast {
+		Shapefile shp = new Shapefile('data/adagis/flaechenfundstellen.shp')
+		println shp.getCount()
+
+ 		Projection p = new Projection("EPSG:2056")
+		shp.setProj(p)
+
+		PostGIS postgis = new PostGIS(dbDatabase, dbHost, dbPort, "ada_adagis_a", dbUsr, dbPwd)
+		println postgis.getLayers()
+
+		//postgis.add(shp)
+		postgis.close()
+	}
+}
+
+
 def setPropertyDefault(propertyName, defaultValue) {
     if (!project.hasProperty(propertyName)) {
         ext[propertyName] = defaultValue
