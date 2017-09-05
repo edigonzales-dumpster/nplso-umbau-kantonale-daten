@@ -1,0 +1,37 @@
+INTERLIS 2.3;
+
+MODEL SO_BLN_20170904 (de)
+AT "http://www.geo.so.ch/models/ARP"
+VERSION "2017-09-04"  =
+  IMPORTS GeometryCHLV95_V1;
+
+  TOPIC BLN =
+    OID AS INTERLIS.UUIDOID;
+
+    CLASS BLN =
+      /** Nummer des BLN-Objektes
+       */
+      ObjNummer : MANDATORY TEXT*20;
+      /** Name des BLN-Objektes
+       */
+      Name : MANDATORY TEXT*255;
+      /** Link auf das Objektblatt
+       */
+      RefObjBlatt : INTERLIS.URI;
+      /** Offizielles Datum der Inkraftsetzung
+       */
+      Inkraftsetzungsdatum : MANDATORY INTERLIS.XMLDate;
+      /** Datum einer Veränderung des Objektes
+       */
+      Mutationsdatum : INTERLIS.XMLDate;
+      /** Grund der Veränderung
+       */
+      Mutationsgrund_Text : TEXT*1024;
+      /** Geometrie des BLN-Objektes
+       */
+      Geo_Obj : GeometryCHLV95_V1.MultiSurface;
+    END BLN;
+
+  END BLN;
+
+END SO_BLN_20170904.

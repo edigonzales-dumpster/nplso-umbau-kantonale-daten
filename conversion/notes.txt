@@ -3,6 +3,7 @@
 595    Grundwasserschutzzone S3    5950    Grundwasserschutzzone S3    orientierend
 596    Grundwasserschutzareal    5960    Grundwasserschutzareal    orientierend
 
+GRSA
 	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (typ_kt, code_kommunal, bezeichnung, verbindlichkeit)
 	VALUES ('N593_Grundwasserschutzzone_S1', '5930', 'Grundwasserschutzzone S1', 'orientierend')		
 
@@ -31,3 +32,4 @@ typ_flaeche AS (
 	bemerkungen varchar(240) NULL,
 
 
+ inKraft	Attribut: rrb_date		AFU	wkb_geometry	Attribut: new_date

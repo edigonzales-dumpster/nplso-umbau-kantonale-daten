@@ -1,0 +1,6 @@
+# Bestehender Datensatz importieren.
+# Daten werden vom Bund erfasst, geometriesch jedoch sehr generalisiert.
+# ARP verfeinert die Geometrien für die Datenabgabe im Rahmen
+# der Erfassung der Nutzungsplanung (orientierender Inhalt).
+
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbport 5432 --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --defaultSrsCode 2056 --nameByTopic --strokeArcs --createFk --createFkIdx --createGeomIdx --createNumChecks --createUnique --coalesceMultiSurface --modeldir "http://models.geo.admin.ch;." --models SO_BLN_20170904 --dbschema arp_bln --createscript bln-init.sql  --import bln.xtf

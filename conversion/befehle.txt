@@ -8,18 +8,31 @@ java -jar ../Apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-cen
 
 xmllint --format rohr_export.xtf -o rohr_export.xtf
 
+**********************************************
 
 java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170105 --dbschema arp_npl_export --dataset 2502 --export wisen_export.xtf
 
 java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --disableValidation --models SO_Nutzungsplanung_20170901 --dbschema arp_npl_export --dataset 2502 --export wisen_export.xtf
 
-java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --disableValidation --models SO_Nutzungsplanung_20170901 --dbschema arp_npl_export  --export wisen_export.xtf
 
 
 xmllint --format wisen_export.xtf -o wisen_export.xtf
 
 
 java -jar ~/apps/ilivalidator-1.4.0/ilivalidator.jar wisen_export.xtf
+
+
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170901 --dbschema arp_npl_wisen_test --dataset 2502 --modeldir "http://models.geo.admin.ch;." --import wisen_export.xtf
+
+
+**********************************************
+
+
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --sqlEnableNull --createGeomIdx --models SO_BLN_20170904 --dbschema arp_bln --modeldir "http://models.geo.admin.ch;." --export bln_export.xtf
+
+
+
+**********************************************
 
 
 

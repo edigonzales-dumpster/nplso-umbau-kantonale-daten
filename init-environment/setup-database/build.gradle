@@ -217,7 +217,7 @@ task createBlnSchema() {
         config.setDburl("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbDatabase)
 
 		config.setConfigReadFromDb(false)
-        config.setModels("CH_BLN_20170904")
+        config.setModels("SO_BLN_20170904")
 		config.setDbschema("arp_bln")
         Ili2db.runSchemaImport(config, "")
 	}

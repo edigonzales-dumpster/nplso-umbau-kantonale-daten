@@ -1,42 +1,31 @@
--- Löschen: So noch nicht definitive Lösung.
--- Sinnvolle Initialisierung überlegen.
-DELETE FROM
-	arp_npl_export.t_ili2db_dataset;
 
-DELETE FROM
-	arp_npl_export.t_ili2db_basket;
+/*
+ * init-common-tables.sql has to be executed before!
+*/
 
+
+-- Delete all areas that belong to a 
+-- Grundwasserschutzzonen und -areale type.
 DELETE FROM 
-	arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche;
+	arp_npl_export.nutzungsplanung_ueberlagernd_flaeche
+WHERE typ_ueberlagernd_flaeche IN 
+(
+	SELECT
+		DISTINCT t_id
+	FROM 
+		arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche
+	WHERE typ_kt IN ('N593_Grundwasserschutzzone_S1', 'N594_Grundwasserschutzzone_S2', 'N595_Grundwasserschutzzone_S3', 'N596_Grundwasserschutzareal')
+);
 
+-- Delete all Grundwasserschutzzonen und -areale types.
 DELETE FROM 
-	arp_npl_export.nutzungsplanung_ueberlagernd_flaeche;
+	arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche
+WHERE typ_kt IN ('N593_Grundwasserschutzzone_S1', 'N594_Grundwasserschutzzone_S2', 'N595_Grundwasserschutzzone_S3', 'N596_Grundwasserschutzareal');
 	
-WITH datasets AS (
-	INSERT INTO arp_npl_export.t_ili2db_dataset (t_id, datasetname)
-	SELECT 
-		nextval('arp_npl_export.t_ili2db_seq'::regclass), bfs_gemein::varchar AS datasetname 
-	FROM 
-		agi_gemgre.gemeindegrenze AS g
-	--WHERE bfs_gemein = 2502
-	RETURNING *
-),
--- Pro Gemeinde gäbe es einmal "Nutzungsplanung"?
-baskets_nutzungsplanung AS (
-	INSERT INTO arp_npl_export.t_ili2db_basket (t_id, dataset, topic, t_ili_tid, attachmentkey)
-	SELECT 
-		nextval('arp_npl_export.t_ili2db_seq'::regclass) AS t_id, t_id AS dataset, 
-		'SO_Nutzungsplanung_20170901.Nutzungsplanung' AS topic,  'SO_Nutzungsplanung_20170901.Nutzungsplanung' AS t_ili_tid, 
-		datasetname::varchar AS attachmentkey
-	FROM 
-		datasets
-	RETURNING *
-),
--- alle Gemeinden _mit_ Typ xxx
--- Geht so eigentlich nicht mehr ganz auf:
+-- Achtung:
 -- code_kommunal ist UNIQUE. Wenn man aber mit datasets arbeitet,
 -- werden zwangsläufig gleiche code_kommunal-Werte vorhanden sein.
-typ_593 AS (
+WITH typ_593 AS (
 	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
 	SELECT 	
 		baskets_nutzungsplanung.t_id AS t_basket,
@@ -58,8 +47,8 @@ typ_593 AS (
 		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	datasets,
-	baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
@@ -86,8 +75,8 @@ typ_594 AS (
 		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	datasets,
-	baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
@@ -114,8 +103,8 @@ typ_595 AS (
 		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	datasets,
-	baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
@@ -142,8 +131,8 @@ typ_596 AS (
 		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	datasets,
-	baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
@@ -231,11 +220,40 @@ geometrie_595 AS (
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
+),
+geometrie_596 AS (
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
+		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
+	SELECT 
+		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+	FROM (
+		SELECT 
+		   	typ_596.t_basket AS t_basket,
+			gem.bfs_gemein::varchar AS t_databasename,
+			uuid_generate_v4() AS t_ili_tid,
+		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
+		   	'inKraft' AS rechtsstatus,
+		   	rrb_date AS publiziertab,
+		   	'AFU' AS erfasser,
+		   	new_date AS datum,
+		   	typ_596.t_id AS typ_ueberlagernd_flaeche,
+			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+		FROM
+	    	agi_gemgre.gemeindegrenze AS gem, 
+		    	afu_gws.public_aww_gszoar AS gs,
+		    typ_596
+		WHERE gs."zone" = 'SARE'
+		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND typ_596.t_datasetname = gem.bfs_gemein::varchar
+	) AS foo
+	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
+	RETURNING *
 )
+
 SELECT 
 	*
 FROM
-	geometrie_595;
+	geometrie_596;
 	
 	
 
