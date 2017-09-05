@@ -79,4 +79,4 @@ geometrie_520 AS (
 SELECT
 	*
 FROM
-	geometrie_520
+	geometrie_520;
