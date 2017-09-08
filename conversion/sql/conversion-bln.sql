@@ -52,9 +52,9 @@ WITH typ_520 AS (
 ),
 geometrie_520 AS (
 	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
-		(t_basket, t_datasetname, t_ili_tid, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
+		(t_basket, t_datasetname, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
 	SELECT 
-		t_basket, t_databasename, t_ili_tid, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+		t_basket, t_databasename, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
 	FROM (		
 		SELECT 
 		   	typ_520.t_basket AS t_basket,
@@ -62,6 +62,7 @@ geometrie_520 AS (
 			uuid_generate_v4() AS t_ili_tid,
 		   	'inKraft' AS rechtsstatus,
 		   	inkraftsetzungsdatum AS publiziertab,
+		   	b.objnummer || ' - ' || b.aname AS bemerkungen,
 		   	'ARP' AS erfasser,
 		   	now() AS datum,
 		   	typ_520.t_id AS typ_ueberlagernd_flaeche,
