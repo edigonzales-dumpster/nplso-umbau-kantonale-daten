@@ -106,10 +106,10 @@ geometrie_699 AS (
 			gem.bfs_gemein::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	'inKraft' AS rechtsstatus,
-		   	'2999-12-31'::date AS publiziertab,
+		   	new_date::date AS publiziertab,
 		   	fund.art AS bemerkungen,
 		   	'ADA' AS erfasser,
-		   	now() AS datum,
+		   	new_date::date AS datum,
 		   	typ_699.t_id AS typ_ueberlagernd_flaeche,
 			(ST_Dump(ST_Intersection(fund.the_geom, gem.the_geom))).geom AS geometrie
 		FROM
@@ -135,10 +135,10 @@ geometrie_899 AS (
 			gem.bfs_gemein::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	'inKraft' AS rechtsstatus,
-		   	'2999-12-31'::date AS publiziertab,
+		   	new_date::date AS publiziertab,
 		   	fund.art AS bemerkungen,
 		   	'ADA' AS erfasser,
-		   	now() AS datum,
+		   	new_date::date AS datum,
 		   	typ_899.t_id AS typ_ueberlagernd_punkt,
 			ST_Intersection(fund.the_geom, gem.the_geom) AS geometrie
 		FROM

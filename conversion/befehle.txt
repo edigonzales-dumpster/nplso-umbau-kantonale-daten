@@ -22,6 +22,12 @@ xmllint --format wisen_export.xtf -o wisen_export.xtf
 java -jar ~/apps/ilivalidator-1.4.0/ilivalidator.jar wisen_export.xtf
 
 
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --disableValidation --models SO_Nutzungsplanung_20170901 --dbschema arp_npl_export --dataset 2520 --export halten_export.xtf
+
+xmllint --format halten_export.xtf -o halten_export.xtf
+
+java -jar ~/apps/ilivalidator-1.4.0/ilivalidator.jar halten_export.xtf
+
 java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170901 --dbschema arp_npl_wisen_test --dataset 2502 --modeldir "http://models.geo.admin.ch;." --import wisen_export.xtf
 
 
@@ -47,3 +53,12 @@ java -jar ../../../apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.
 java -jar ../../../apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170105 --dbschema arp_npl_rohr_1  --dataset rohr --import roh_20170717A.xtf
 
 java -jar ../../../apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170105 --dbschema arp_npl_rohr_1  --dataset rohr  --export export_rohr.xtf
+
+
+
+***********
+
+
+# Kommentar: Exportschema für den Zusammenzug der kantonalen Daten für die Abgabe im NPLSO-Datenmodell.
+
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbport 5432 --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --defaultSrsCode 2056 --nameByTopic --strokeArcs --createFk --createFkIdx --createGeomIdx --createNumChecks --createUnique --coalesceMultiSurface  --models SO_Nutzungsplanung_20170901 --dbschema arp_nplso_export   --schemaimport

@@ -1,0 +1,21 @@
+import ch.so.agi.gretl.steps.*
+
+task fubar(){
+    doLast {
+        println "fubar"
+    }
+}
+
+task setupGemeindegrenzen(type: SqlExecutorTask) {
+    database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
+    sqlFiles = ["setupGemeindegrenzen.sql"]
+}
+
+task copyGemeindegrenzen(type: Db2DbTask) {
+    sourceDb =  ["jdbc:postgresql://geodb.verw.rootso.org:5432/sogis", "mspublic", "mspublic"]
+    targetDb = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
+    transferSets = [
+            new TransferSet("copyGemeindegrenzen.sql", 'agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze', true)
+    ]
+
+}
