@@ -123,37 +123,31 @@ geometrie_699 AS (
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
-),
-geometrie_899 AS (
-	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_punkt 
-		(t_basket, t_datasetname, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_punkt, geometrie)
-	SELECT 
-		t_basket, t_databasename, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_punkt, geometrie
-	FROM (		
-		SELECT 
-		   	typ_899.t_basket AS t_basket,
-			gem.bfs_gemeindenummer::varchar AS t_databasename,
-			uuid_generate_v4() AS t_ili_tid,
-		   	'inKraft' AS rechtsstatus,
-		   	new_date::date AS publiziertab,
-		   	fund.art AS bemerkungen,
-		   	'ADA' AS erfasser,
-		   	new_date::date AS datum,
-		   	typ_899.t_id AS typ_ueberlagernd_punkt,
-			ST_Intersection(fund.geometrie, gem.geometrie) AS geometrie
-		FROM
-		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
-		    ada_adagis_a.punktfundstellen AS fund,
-		    typ_899
-		WHERE fund."archive" = 'f'
-		AND fund.geschuetzt = 't'
-		AND ST_Intersects(gem.geometrie, fund.geometrie)
-		AND typ_899.t_datasetname = gem.bfs_gemeindenummer::varchar
-	) AS foo
-	WHERE ST_GeometryType(geometrie) = 'ST_Point'
-	RETURNING *
 )
-SELECT
-	*
-FROM
-	geometrie_899;
+-- geometrie_899
+INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_punkt 
+	(t_basket, t_datasetname, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_punkt, geometrie)
+SELECT 
+	t_basket, t_databasename, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_punkt, geometrie
+FROM (		
+	SELECT 
+	   	typ_899.t_basket AS t_basket,
+		gem.bfs_gemeindenummer::varchar AS t_databasename,
+		uuid_generate_v4() AS t_ili_tid,
+	   	'inKraft' AS rechtsstatus,
+	   	new_date::date AS publiziertab,
+	   	fund.art AS bemerkungen,
+	   	'ADA' AS erfasser,
+	   	new_date::date AS datum,
+	   	typ_899.t_id AS typ_ueberlagernd_punkt,
+		ST_Intersection(fund.geometrie, gem.geometrie) AS geometrie
+	FROM
+	    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+	    ada_adagis_a.punktfundstellen AS fund,
+	    typ_899
+	WHERE fund."archive" = 'f'
+	AND fund.geschuetzt = 't'
+	AND ST_Intersects(gem.geometrie, fund.geometrie)
+	AND typ_899.t_datasetname = gem.bfs_gemeindenummer::varchar
+) AS foo
+WHERE ST_GeometryType(geometrie) = 'ST_Point';

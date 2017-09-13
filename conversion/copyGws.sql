@@ -227,42 +227,33 @@ geometrie_595 AS (
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
-),
-geometrie_596 AS (
-	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
-		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
-	SELECT 
-		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
-	FROM (
-		SELECT 
-		   	typ_596.t_basket AS t_basket,
-			gem.bfs_gemeindenummer::varchar AS t_databasename,
-			uuid_generate_v4() AS t_ili_tid,
-		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
-		   	'inKraft' AS rechtsstatus,
-		   	rrb_date AS publiziertab,
-		   	'AFU' AS erfasser,
-		   	new_date AS datum,
-		   	typ_596.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(gs.wkb_geometry, gem.geometrie))).geom AS geometrie
-		FROM
-	    	agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
-		    	aww_gszoar AS gs,
-		    typ_596
-		WHERE gs."zone" = 'SARE'
-		AND gs."archive" = 0
-		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
-		AND typ_596.t_datasetname = gem.bfs_gemeindenummer::varchar
-	) AS foo
-	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
-	RETURNING *
 )
-
+-- geometrie_596
+INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
+	(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
 SELECT 
-	*
-FROM
-	geometrie_596;
-	
-	
+	t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+FROM (
+	SELECT 
+	   	typ_596.t_basket AS t_basket,
+		gem.bfs_gemeindenummer::varchar AS t_databasename,
+		uuid_generate_v4() AS t_ili_tid,
+	   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
+	   	'inKraft' AS rechtsstatus,
+	   	rrb_date AS publiziertab,
+	   	'AFU' AS erfasser,
+	   	new_date AS datum,
+	   	typ_596.t_id AS typ_ueberlagernd_flaeche,
+		(ST_Dump(ST_Intersection(gs.wkb_geometry, gem.geometrie))).geom AS geometrie
+	FROM
+    	agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+	    	aww_gszoar AS gs,
+	    typ_596
+	WHERE gs."zone" = 'SARE'
+	AND gs."archive" = 0
+	AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
+	AND typ_596.t_datasetname = gem.bfs_gemeindenummer::varchar
+) AS foo
+WHERE ST_GeometryType(geometrie) = 'ST_Polygon';	
 
 	

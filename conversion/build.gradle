@@ -1,0 +1,36 @@
+description = """\n
+'initCommonTables' initialisiert 'dataset'- und 'basket'-Tabelle.
+Dieser Task muss einmal zu Beginn ausgeführt werden.
+
+'dataset': Tabelle wird durch Task so abgefüllt, dass Export
+pro Gemeinde möglich ist.
+
+'basket': Es wird der Nutzungsplanungs-Basket für jedes Dataset
+erstellt. Werden noch Daten für Topics/Baskets exportiert, muss
+dieser auch noch eingefügt werden.
+
+Wird 'initCommonTables' nach Kopiertasks nochmalig ausgeführt, 
+müssen die Kopiertasks ebenfalls wieder ausgeführt werden.
+"""
+
+import ch.so.agi.gretl.steps.*
+
+task initCommonTables(type: SqlExecutorTask) {
+    database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
+    sqlFiles = ["initCommonTables.sql"]
+}
+
+task copyBlnGebiete(type: SqlExecutorTask) {
+    database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
+    sqlFiles = ["copyBlnGebiete.sql"]
+}
+
+task copyAdaFundstellen(type: SqlExecutorTask) {
+    database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
+    sqlFiles = ["copyAdaFundstellen.sql"]
+}
+
+task copyGws(type: SqlExecutorTask) {
+    database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
+    sqlFiles = ["copyGws.sql"]
+}

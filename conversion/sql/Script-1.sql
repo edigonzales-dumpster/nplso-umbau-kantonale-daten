@@ -1,4 +1,0 @@
-SELECT
-st_asewkt(geometrie)
-FROM
-agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze;

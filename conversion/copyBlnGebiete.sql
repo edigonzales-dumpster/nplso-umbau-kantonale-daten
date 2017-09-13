@@ -49,35 +49,29 @@ WITH typ_520 AS (
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
-),
-geometrie_520 AS (
-	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
-		(t_basket, t_datasetname, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
-	SELECT 
-		t_basket, t_databasename, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
-	FROM (		
-		SELECT 
-		   	typ_520.t_basket AS t_basket,
-			gem.bfs_gemeindenummer::varchar AS t_databasename,
-			uuid_generate_v4() AS t_ili_tid,
-		   	'inKraft' AS rechtsstatus,
-		   	inkraftsetzungsdatum AS publiziertab,
-		   	b.objnummer || ' - ' || b.aname AS bemerkungen,
-		   	'ARP' AS erfasser,
-		   	now() AS datum,
-		   	typ_520.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(b.geo_obj, gem.geometrie))).geom AS geometrie
-		FROM
-		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
-		    arp_bln.bln_bln AS b,
-		    typ_520
-		WHERE ST_Intersects(gem.geometrie, ST_Buffer(b.geo_obj, -1.0))
-		AND typ_520.t_datasetname = gem.bfs_gemeindenummer::varchar
-	) AS foo
-	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
-	RETURNING *
 )
-SELECT
-	*
-FROM
-	geometrie_520;
+-- geometrie_520
+INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
+	(t_basket, t_datasetname, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
+SELECT 
+	t_basket, t_databasename, t_ili_tid, rechtsstatus, publiziertab, bemerkungen, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
+FROM (		
+	SELECT 
+	   	typ_520.t_basket AS t_basket,
+		gem.bfs_gemeindenummer::varchar AS t_databasename,
+		uuid_generate_v4() AS t_ili_tid,
+	   	'inKraft' AS rechtsstatus,
+	   	inkraftsetzungsdatum AS publiziertab,
+	   	b.objnummer || ' - ' || b.aname AS bemerkungen,
+	   	'ARP' AS erfasser,
+	   	now() AS datum,
+	   	typ_520.t_id AS typ_ueberlagernd_flaeche,
+		(ST_Dump(ST_Intersection(b.geo_obj, gem.geometrie))).geom AS geometrie
+	FROM
+	    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+	    arp_bln.bln_bln AS b,
+	    typ_520
+	WHERE ST_Intersects(gem.geometrie, ST_Buffer(b.geo_obj, -1.0))
+	AND typ_520.t_datasetname = gem.bfs_gemeindenummer::varchar
+) AS foo
+WHERE ST_GeometryType(geometrie) = 'ST_Polygon';
