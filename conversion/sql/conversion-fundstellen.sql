@@ -52,13 +52,13 @@ WITH typ_699 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
 		    ada_adagis_a.flaechenfundstellen AS fund
 		WHERE fund."archive" = 'f'
 		AND fund.geschuetzt = 't'
-		AND ST_Intersects(gem.the_geom, ST_Buffer(fund.the_geom, -1.0))
+		AND ST_Intersects(gem.geometrie, ST_Buffer(fund.geometrie, -1.0))
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -80,13 +80,13 @@ typ_899 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
 		    ada_adagis_a.punktfundstellen AS fund
 		WHERE fund."archive" = 'f'
 		AND fund.geschuetzt = 't'
-		AND ST_Intersects(gem.the_geom, fund.the_geom)
+		AND ST_Intersects(gem.geometrie, fund.geometrie)
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -103,7 +103,7 @@ geometrie_699 AS (
 	FROM (		
 		SELECT 
 		   	typ_699.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	'inKraft' AS rechtsstatus,
 		   	new_date::date AS publiziertab,
@@ -111,15 +111,15 @@ geometrie_699 AS (
 		   	'ADA' AS erfasser,
 		   	new_date::date AS datum,
 		   	typ_699.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(fund.the_geom, gem.the_geom))).geom AS geometrie
+			(ST_Dump(ST_Intersection(fund.geometrie, gem.geometrie))).geom AS geometrie
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
 		    ada_adagis_a.flaechenfundstellen AS fund,
 		    typ_699
 		WHERE fund."archive" = 'f'
 		AND fund.geschuetzt = 't'
-		AND ST_Intersects(gem.the_geom, ST_Buffer(fund.the_geom, -1.0))
-		AND typ_699.t_datasetname = gem.bfs_gemein::varchar
+		AND ST_Intersects(gem.geometrie, ST_Buffer(fund.geometrie, -1.0))
+		AND typ_699.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
@@ -132,7 +132,7 @@ geometrie_899 AS (
 	FROM (		
 		SELECT 
 		   	typ_899.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	'inKraft' AS rechtsstatus,
 		   	new_date::date AS publiziertab,
@@ -140,15 +140,15 @@ geometrie_899 AS (
 		   	'ADA' AS erfasser,
 		   	new_date::date AS datum,
 		   	typ_899.t_id AS typ_ueberlagernd_punkt,
-			ST_Intersection(fund.the_geom, gem.the_geom) AS geometrie
+			ST_Intersection(fund.geometrie, gem.geometrie) AS geometrie
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
 		    ada_adagis_a.punktfundstellen AS fund,
 		    typ_899
 		WHERE fund."archive" = 'f'
 		AND fund.geschuetzt = 't'
-		AND ST_Intersects(gem.the_geom, fund.the_geom)
-		AND typ_899.t_datasetname = gem.bfs_gemein::varchar
+		AND ST_Intersects(gem.geometrie, fund.geometrie)
+		AND typ_899.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Point'
 	RETURNING *

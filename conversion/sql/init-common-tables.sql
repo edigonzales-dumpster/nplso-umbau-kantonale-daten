@@ -15,9 +15,9 @@ WHERE topic = 'SO_Nutzungsplanung_20170901.Nutzungsplanung';
 WITH datasets AS (
 	INSERT INTO arp_npl_export.t_ili2db_dataset (t_id, datasetname)
 	SELECT 
-		nextval('arp_npl_export.t_ili2db_seq'::regclass), bfs_gemein::varchar AS datasetname 
+		nextval('arp_npl_export.t_ili2db_seq'::regclass), bfs_gemeindenummer::varchar AS datasetname 
 	FROM 
-		agi_gemgre.gemeindegrenze AS g
+		agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS g
 	--WHERE bfs_gemein = 2502
 	RETURNING *
 ),

@@ -39,12 +39,13 @@ WITH typ_593 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
-		    afu_gws.public_aww_gszoar AS gs
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    aww_gszoar AS gs
 		WHERE (gs."zone" = 'GZ1' OR gs."zone" = 'GZ1B')
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND gs."archive" = 0		
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -67,12 +68,13 @@ typ_594 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
-		    afu_gws.public_aww_gszoar AS gs
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    aww_gszoar AS gs
 		WHERE (gs."zone" = 'GZ2' OR gs."zone" = 'GZ2B')
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND gs."archive" = 0		
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -95,12 +97,13 @@ typ_595 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
-		    afu_gws.public_aww_gszoar AS gs
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    aww_gszoar AS gs
 		WHERE (gs."zone" = 'GZ3' OR gs."zone" = 'GZ3B')
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		AND gs."archive" = 0		
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -123,12 +126,13 @@ typ_596 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
-		    afu_gws.public_aww_gszoar AS gs
-		WHERE gs."zone" = 'SARE' 
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    aww_gszoar AS gs
+		WHERE gs."zone" = 'SARE'
+		AND gs."archive" = 0		
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -145,7 +149,7 @@ geometrie_593 AS (
 	FROM (		
 		SELECT 
 		   	typ_593.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
 		   	'inKraft' AS rechtsstatus,
@@ -153,14 +157,15 @@ geometrie_593 AS (
 		   	'AFU' AS erfasser,
 		   	new_date AS datum,
 		   	typ_593.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+			(ST_Dump(ST_Intersection(gs.wkb_geometry, gem.geometrie))).geom AS geometrie
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
-		    afu_gws.public_aww_gszoar AS gs,
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    aww_gszoar AS gs,
 		    typ_593
 		WHERE (gs."zone" = 'GZ1' OR gs."zone" = 'GZ1B')
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
-		AND typ_593.t_datasetname = gem.bfs_gemein::varchar
+		AND gs."archive" = 0		
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
+		AND typ_593.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
@@ -173,7 +178,7 @@ geometrie_594 AS (
 	FROM (
 		SELECT 
 		   	typ_594.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
 		   	'inKraft' AS rechtsstatus,
@@ -181,14 +186,15 @@ geometrie_594 AS (
 		   	'AFU' AS erfasser,
 		   	new_date AS datum,
 		   	typ_594.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+			(ST_Dump(ST_Intersection(gs.wkb_geometry, gem.geometrie))).geom AS geometrie
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
-		    afu_gws.public_aww_gszoar AS gs,
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    aww_gszoar AS gs,
 		    typ_594
 		WHERE (gs."zone" = 'GZ2' OR gs."zone" = 'GZ2B')
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
-		AND typ_594.t_datasetname = gem.bfs_gemein::varchar
+		AND gs."archive" = 0		
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
+		AND typ_594.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
@@ -201,7 +207,7 @@ geometrie_595 AS (
 	FROM (
 		SELECT 
 		   	typ_595.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
 		   	'inKraft' AS rechtsstatus,
@@ -209,14 +215,15 @@ geometrie_595 AS (
 		   	'AFU' AS erfasser,
 		   	new_date AS datum,
 		   	typ_595.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+			(ST_Dump(ST_Intersection(gs.wkb_geometry, gem.geometrie))).geom AS geometrie
 		FROM
-	    	agi_gemgre.gemeindegrenze AS gem, 
-		    	afu_gws.public_aww_gszoar AS gs,
+	    	agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    	aww_gszoar AS gs,
 		    typ_595
 		WHERE (gs."zone" = 'GZ3' OR gs."zone" = 'GZ3B')
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
-		AND typ_595.t_datasetname = gem.bfs_gemein::varchar
+		AND gs."archive" = 0
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
+		AND typ_595.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
@@ -229,7 +236,7 @@ geometrie_596 AS (
 	FROM (
 		SELECT 
 		   	typ_596.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	date_part('year', rrb_date) || '/' || rrbnr::varchar AS name_nummer,
 		   	'inKraft' AS rechtsstatus,
@@ -237,14 +244,15 @@ geometrie_596 AS (
 		   	'AFU' AS erfasser,
 		   	new_date AS datum,
 		   	typ_596.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(gs.the_geom, gem.the_geom))).geom AS geometrie
+			(ST_Dump(ST_Intersection(gs.wkb_geometry, gem.geometrie))).geom AS geometrie
 		FROM
-	    	agi_gemgre.gemeindegrenze AS gem, 
-		    	afu_gws.public_aww_gszoar AS gs,
+	    	agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
+		    	aww_gszoar AS gs,
 		    typ_596
 		WHERE gs."zone" = 'SARE'
-		AND ST_Intersects(gem.the_geom, ST_Buffer(gs.the_geom, -1.0))
-		AND typ_596.t_datasetname = gem.bfs_gemein::varchar
+		AND gs."archive" = 0
+		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
+		AND typ_596.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *

@@ -37,11 +37,11 @@ WITH typ_520 AS (
 	FROM
 	(
 		SELECT 
-		    DISTINCT gem.bfs_gemein::varchar AS datasetname
+		    DISTINCT gem.bfs_gemeindenummer::varchar AS datasetname
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
 		    arp_bln.bln_bln AS b
-		WHERE ST_Intersects(gem.the_geom, ST_Buffer(b.geo_obj, -1.0))
+		WHERE ST_Intersects(gem.geometrie, ST_Buffer(b.geo_obj, -1.0))
 		ORDER BY datasetname
 	) AS typen,
 	arp_npl_export.t_ili2db_dataset AS datasets,
@@ -58,7 +58,7 @@ geometrie_520 AS (
 	FROM (		
 		SELECT 
 		   	typ_520.t_basket AS t_basket,
-			gem.bfs_gemein::varchar AS t_databasename,
+			gem.bfs_gemeindenummer::varchar AS t_databasename,
 			uuid_generate_v4() AS t_ili_tid,
 		   	'inKraft' AS rechtsstatus,
 		   	inkraftsetzungsdatum AS publiziertab,
@@ -66,13 +66,13 @@ geometrie_520 AS (
 		   	'ARP' AS erfasser,
 		   	now() AS datum,
 		   	typ_520.t_id AS typ_ueberlagernd_flaeche,
-			(ST_Dump(ST_Intersection(b.geo_obj, gem.the_geom))).geom AS geometrie
+			(ST_Dump(ST_Intersection(b.geo_obj, gem.geometrie))).geom AS geometrie
 		FROM
-		    agi_gemgre.gemeindegrenze AS gem, 
+		    agi_hoheitsgrenzen_pub.hoheitsgrenzen_gemeindegrenze AS gem, 
 		    arp_bln.bln_bln AS b,
 		    typ_520
-		WHERE ST_Intersects(gem.the_geom, ST_Buffer(b.geo_obj, -1.0))
-		AND typ_520.t_datasetname = gem.bfs_gemein::varchar
+		WHERE ST_Intersects(gem.geometrie, ST_Buffer(b.geo_obj, -1.0))
+		AND typ_520.t_datasetname = gem.bfs_gemeindenummer::varchar
 	) AS foo
 	WHERE ST_GeometryType(geometrie) = 'ST_Polygon'
 	RETURNING *
