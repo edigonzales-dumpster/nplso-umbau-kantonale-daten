@@ -1,0 +1,5 @@
+:setupPgExt
+setupPgExt: Start SqlExecutor
+setupPgExt: Given parameters DB-URL: jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2, DB-User: stefan, Files: [/Users/stefan/Projekte/nplso-umbau-gewaesserschutz/init-environment/setup-database/sql/createExtensions.sql]
+:setupPgExt FAILED
+1 actionable task: 1 executed

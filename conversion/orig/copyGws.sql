@@ -7,26 +7,26 @@
 -- Delete all areas that belong to a 
 -- Grundwasserschutzzonen und -areale type.
 DELETE FROM 
-	arp_npl_kantdaten_export.nutzungsplanung_ueberlagernd_flaeche
+	arp_npl_export.nutzungsplanung_ueberlagernd_flaeche
 WHERE typ_ueberlagernd_flaeche IN 
 (
 	SELECT
 		DISTINCT t_id
 	FROM 
-		arp_npl_kantdaten_export.nutzungsplanung_typ_ueberlagernd_flaeche
+		arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche
 	WHERE typ_kt IN ('N593_Grundwasserschutzzone_S1', 'N594_Grundwasserschutzzone_S2', 'N595_Grundwasserschutzzone_S3', 'N596_Grundwasserschutzareal')
 );
 
 -- Delete all Grundwasserschutzzonen und -areale types.
 DELETE FROM 
-	arp_npl_kantdaten_export.nutzungsplanung_typ_ueberlagernd_flaeche
+	arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche
 WHERE typ_kt IN ('N593_Grundwasserschutzzone_S1', 'N594_Grundwasserschutzzone_S2', 'N595_Grundwasserschutzzone_S3', 'N596_Grundwasserschutzareal');
 	
 -- Achtung:
 -- code_kommunal ist UNIQUE. Wenn man aber mit datasets arbeitet,
 -- werden zwangsläufig gleiche code_kommunal-Werte vorhanden sein.
 WITH typ_593 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
 	SELECT 	
 		baskets_nutzungsplanung.t_id AS t_basket,
 		datasets.datasetname AS t_datasetname,
@@ -48,14 +48,14 @@ WITH typ_593 AS (
 		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	arp_npl_kantdaten_export.t_ili2db_dataset AS datasets,
-	arp_npl_kantdaten_export.t_ili2db_basket AS baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
 ),
 typ_594 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
 	SELECT 	
 		baskets_nutzungsplanung.t_id AS t_basket,
 		datasets.datasetname AS t_datasetname,
@@ -77,14 +77,14 @@ typ_594 AS (
 		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	arp_npl_kantdaten_export.t_ili2db_dataset AS datasets,
-	arp_npl_kantdaten_export.t_ili2db_basket AS baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
 ),
 typ_595 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
 	SELECT 	
 		baskets_nutzungsplanung.t_id AS t_basket,
 		datasets.datasetname AS t_datasetname,
@@ -106,14 +106,14 @@ typ_595 AS (
 		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	arp_npl_kantdaten_export.t_ili2db_dataset AS datasets,
-	arp_npl_kantdaten_export.t_ili2db_basket AS baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
 ),
 typ_596 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
+	INSERT INTO arp_npl_export.nutzungsplanung_typ_ueberlagernd_flaeche (t_basket, t_datasetname, t_ili_tid, typ_kt, code_kommunal, bezeichnung, abkuerzung, verbindlichkeit)
 	SELECT 	
 		baskets_nutzungsplanung.t_id AS t_basket,
 		datasets.datasetname AS t_datasetname,
@@ -135,14 +135,14 @@ typ_596 AS (
 		AND ST_Intersects(gem.geometrie, ST_Buffer(gs.wkb_geometry, -1.0))
 		ORDER BY datasetname
 	) AS typen,
-	arp_npl_kantdaten_export.t_ili2db_dataset AS datasets,
-	arp_npl_kantdaten_export.t_ili2db_basket AS baskets_nutzungsplanung
+	arp_npl_export.t_ili2db_dataset AS datasets,
+	arp_npl_export.t_ili2db_basket AS baskets_nutzungsplanung
 	WHERE typen.datasetname = datasets.datasetname
 	AND baskets_nutzungsplanung.dataset = datasets.t_id
 	RETURNING *
 ),
 geometrie_593 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_ueberlagernd_flaeche 
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
 		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
 	SELECT 
 		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
@@ -171,7 +171,7 @@ geometrie_593 AS (
 	RETURNING *
 ),
 geometrie_594 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_ueberlagernd_flaeche 
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
 		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
 	SELECT 
 		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
@@ -200,7 +200,7 @@ geometrie_594 AS (
 	RETURNING *
 ),
 geometrie_595 AS (
-	INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_ueberlagernd_flaeche 
+	INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
 		(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
 	SELECT 
 		t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie
@@ -229,7 +229,7 @@ geometrie_595 AS (
 	RETURNING *
 )
 -- geometrie_596
-INSERT INTO arp_npl_kantdaten_export.nutzungsplanung_ueberlagernd_flaeche 
+INSERT INTO arp_npl_export.nutzungsplanung_ueberlagernd_flaeche 
 	(t_basket, t_datasetname, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie)
 SELECT 
 	t_basket, t_databasename, t_ili_tid, name_nummer, rechtsstatus, publiziertab, erfasser, datum, typ_ueberlagernd_flaeche, geometrie

@@ -9,7 +9,7 @@ pro Gemeinde möglich ist.
 erstellt. Werden noch Daten für Topics/Baskets exportiert, muss
 dieser auch noch eingefügt werden.
 
-Wird 'initCommonTables' nach Kopiertasks nochmalig ausgeführt,
+Wird 'initCommonTables' nach Kopiertasks nochmalig ausgeführt, 
 müssen die Kopiertasks ebenfalls wieder ausgeführt werden.
 """
 
