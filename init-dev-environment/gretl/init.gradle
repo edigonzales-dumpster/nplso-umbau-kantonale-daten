@@ -1,0 +1,19 @@
+allprojects {
+    buildscript {
+        repositories {
+            mavenCentral()
+            maven {
+                name 'Repository name here'
+                url 'https://artifactory.verw.rootso.org/artifactory/repo-agi-local'
+            }   
+        }
+        dependencies {
+            classpath group: 'ch.so.agi', name: 'gretl',  version: '1.0.+'
+        }
+        ext {
+            dbUrl = System.env.dbUrl
+            dbUser = System.env.dbUser
+            dbPass = System.env.dbPass
+        }
+    }
+}

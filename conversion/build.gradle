@@ -17,20 +17,20 @@ import ch.so.agi.gretl.steps.*
 
 task initCommonTables(type: SqlExecutorTask) {
     database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
-    sqlFiles = ["initCommonTables.sql"]
+    sqlFiles = ["sql/initCommonTables.sql"]
 }
 
 task copyBlnGebiete(type: SqlExecutorTask) {
     database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
-    sqlFiles = ["copyBlnGebiete.sql"]
+    sqlFiles = ["sql/copyBlnGebiete.sql"]
 }
 
 task copyAdaFundstellen(type: SqlExecutorTask) {
     database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
-    sqlFiles = ["copyAdaFundstellen.sql"]
+    sqlFiles = ["sql/copyAdaFundstellen.sql"]
 }
 
 task copyGws(type: SqlExecutorTask) {
     database = ["jdbc:postgresql://geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com:5432/xanadu2", dbUser, dbPass]
-    sqlFiles = ["copyGws.sql"]
+    sqlFiles = ["sql/copyGws.sql"]
 }

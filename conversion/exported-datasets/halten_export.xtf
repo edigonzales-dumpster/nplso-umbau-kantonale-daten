@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TRANSFER xmlns="http://www.interlis.ch/INTERLIS2.3">
+  <HEADERSECTION SENDER="ili2pg-3.9.1-20170627" VERSION="2.3">
+    <MODELS>
+      <MODEL NAME="Units" VERSION="2012-02-20" URI="http://www.interlis.ch/models"/>
+      <MODEL NAME="InternationalCodes_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="Localisation_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="LocalisationCH_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="Dictionaries_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="DictionariesCH_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="CoordSys" VERSION="2015-11-24" URI="http://www.interlis.ch/models"/>
+      <MODEL NAME="CHAdminCodes_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="AdministrativeUnits_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="AdministrativeUnitsCH_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="GeometryCHLV03_V1" VERSION="2015-11-12" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="GeometryCHLV95_V1" VERSION="2015-11-12" URI="http://www.geo.admin.ch"/>
+      <MODEL NAME="SO_Nutzungsplanung_20170915" VERSION="2017-09-15" URI="http://www.geo.so.ch"/>
+    </MODELS>
+  </HEADERSECTION>
+  <DATASECTION>
+    <SO_Nutzungsplanung_20170915.Nutzungsplanung BID="SO_Nutzungsplanung_20170915.Nutzungsplanung">
+      <SO_Nutzungsplanung_20170915.Nutzungsplanung.Typ_Ueberlagernd_Flaeche TID="948245da-4a12-4964-a9f6-4cf9ad772643">
+        <Bezeichnung>Geschützte archäologische Fundstellen</Bezeichnung>
+        <Verbindlichkeit>hinweisend</Verbindlichkeit>
+        <Typ_Kt>N699_weitere_flaechenbezogene_Festlegungen_NP</Typ_Kt>
+        <Code_kommunal>6991</Code_kommunal>
+      </SO_Nutzungsplanung_20170915.Nutzungsplanung.Typ_Ueberlagernd_Flaeche>
+      <SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche TID="b9de215e-0050-4307-9811-0c3aa487ec81">
+        <Geometrie>
+          <SURFACE>
+            <BOUNDARY>
+              <POLYLINE>
+                <COORD>
+                  <C1>2612494.5840313695</C1>
+                  <C2>1224157.2531687564</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612506.842700545</C1>
+                  <C2>1224177.9257735207</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612510.755748455</C1>
+                  <C2>1224182.461963707</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612516.7813070193</C1>
+                  <C2>1224183.5199618677</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612526.338413907</C1>
+                  <C2>1224182.1155660492</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612535.445578179</C1>
+                  <C2>1224179.3106564558</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612544.587353929</C1>
+                  <C2>1224175.3630345233</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612556.637870077</C1>
+                  <C2>1224169.7186356685</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612569.034675878</C1>
+                  <C2>1224164.628276334</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612558.1611360013</C1>
+                  <C2>1224144.163426621</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612553.3823391963</C1>
+                  <C2>1224136.5453833481</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612532.6399212256</C1>
+                  <C2>1224126.1226255973</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612515.949158802</C1>
+                  <C2>1224126.7460529867</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612509.0585457757</C1>
+                  <C2>1224153.4786435142</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612501.8559159706</C1>
+                  <C2>1224155.3139644084</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612494.5840313695</C1>
+                  <C2>1224157.2531687564</C2>
+                </COORD>
+              </POLYLINE>
+            </BOUNDARY>
+          </SURFACE>
+        </Geometrie>
+        <Rechtsstatus>inKraft</Rechtsstatus>
+        <publiziertAb>2016-11-12</publiziertAb>
+        <Bemerkungen>Mittelalterliche Burg mit Graben</Bemerkungen>
+        <Erfasser>ADA</Erfasser>
+        <Datum>2016-11-12</Datum>
+        <Typ_Ueberlagernd_Flaeche REF="948245da-4a12-4964-a9f6-4cf9ad772643"/>
+      </SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche>
+      <SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche TID="0f32f55f-837c-463b-8b04-0e6d295329aa">
+        <Geometrie>
+          <SURFACE>
+            <BOUNDARY>
+              <POLYLINE>
+                <COORD>
+                  <C1>2612432.219126543</C1>
+                  <C2>1224531.650943109</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612466.822031747</C1>
+                  <C2>1224522.9350028455</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612483.212826023</C1>
+                  <C2>1224514.9997121664</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612490.3674440733</C1>
+                  <C2>1224505.1132237497</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612492.318632778</C1>
+                  <C2>1224497.5682993715</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612491.277854639</C1>
+                  <C2>1224491.7144986151</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612487.8954495694</C1>
+                  <C2>1224481.177668997</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612482.041349966</C1>
+                  <C2>1224467.2586579428</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612481.2608076553</C1>
+                  <C2>1224465.6976483224</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612473.195317693</C1>
+                  <C2>1224457.3722940523</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612452.9017226333</C1>
+                  <C2>1224451.3885584911</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612436.510935952</C1>
+                  <C2>1224459.844187735</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612434.8198198006</C1>
+                  <C2>1224460.4946241025</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612434.4301941497</C1>
+                  <C2>1224503.942897314</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612434.560428824</C1>
+                  <C2>1224514.0894983183</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612432.739429229</C1>
+                  <C2>1224528.6589923108</C2>
+                </COORD>
+                <COORD>
+                  <C1>2612432.219126543</C1>
+                  <C2>1224531.650943109</C2>
+                </COORD>
+              </POLYLINE>
+            </BOUNDARY>
+          </SURFACE>
+        </Geometrie>
+        <Rechtsstatus>inKraft</Rechtsstatus>
+        <publiziertAb>2016-11-12</publiziertAb>
+        <Bemerkungen>Mittelalterliche Burg mit Graben</Bemerkungen>
+        <Erfasser>ADA</Erfasser>
+        <Datum>2016-11-12</Datum>
+        <Typ_Ueberlagernd_Flaeche REF="948245da-4a12-4964-a9f6-4cf9ad772643"/>
+      </SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche>
+    </SO_Nutzungsplanung_20170915.Nutzungsplanung>
+  </DATASECTION>
+</TRANSFER>

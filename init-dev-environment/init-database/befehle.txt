@@ -1,0 +1,2 @@
+
+java -jar ~/apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd XXXXXXXX --nameByTopic --disableValidation --defaultSrsCode 2056 --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170915 --dbschema arp_npl_kantdaten_export --modeldir "http://models.geo.admin.ch;." --schemaimport
