@@ -14,18 +14,18 @@
       <MODEL NAME="AdministrativeUnitsCH_V1" VERSION="2011-08-30" URI="http://www.geo.admin.ch"/>
       <MODEL NAME="GeometryCHLV03_V1" VERSION="2015-11-12" URI="http://www.geo.admin.ch"/>
       <MODEL NAME="GeometryCHLV95_V1" VERSION="2015-11-12" URI="http://www.geo.admin.ch"/>
-      <MODEL NAME="SO_Nutzungsplanung_20170901" VERSION="2017-09-01" URI="http://www.geo.so.ch"/>
+      <MODEL NAME="SO_Nutzungsplanung_20170915" VERSION="2017-09-15" URI="http://www.geo.so.ch"/>
     </MODELS>
   </HEADERSECTION>
   <DATASECTION>
-    <SO_Nutzungsplanung_20170901.Nutzungsplanung BID="SO_Nutzungsplanung_20170901.Nutzungsplanung">
-      <SO_Nutzungsplanung_20170901.Nutzungsplanung.Typ_Ueberlagernd_Flaeche TID="6ec56e29-45c1-4082-8992-ad825b8d9d47">
+    <SO_Nutzungsplanung_20170915.Nutzungsplanung BID="SO_Nutzungsplanung_20170915.Nutzungsplanung">
+      <SO_Nutzungsplanung_20170915.Nutzungsplanung.Typ_Ueberlagernd_Flaeche TID="948245da-4a12-4964-a9f6-4cf9ad772643">
         <Bezeichnung>Geschützte archäologische Fundstellen</Bezeichnung>
         <Verbindlichkeit>hinweisend</Verbindlichkeit>
         <Typ_Kt>N699_weitere_flaechenbezogene_Festlegungen_NP</Typ_Kt>
         <Code_kommunal>6991</Code_kommunal>
-      </SO_Nutzungsplanung_20170901.Nutzungsplanung.Typ_Ueberlagernd_Flaeche>
-      <SO_Nutzungsplanung_20170901.Nutzungsplanung.Ueberlagernd_Flaeche TID="53b661f7-5123-48fa-a05c-01d594c35945">
+      </SO_Nutzungsplanung_20170915.Nutzungsplanung.Typ_Ueberlagernd_Flaeche>
+      <SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche TID="b9de215e-0050-4307-9811-0c3aa487ec81">
         <Geometrie>
           <SURFACE>
             <BOUNDARY>
@@ -103,9 +103,9 @@
         <Bemerkungen>Mittelalterliche Burg mit Graben</Bemerkungen>
         <Erfasser>ADA</Erfasser>
         <Datum>2016-11-12</Datum>
-        <Typ_Ueberlagernd_Flaeche REF="6ec56e29-45c1-4082-8992-ad825b8d9d47"/>
-      </SO_Nutzungsplanung_20170901.Nutzungsplanung.Ueberlagernd_Flaeche>
-      <SO_Nutzungsplanung_20170901.Nutzungsplanung.Ueberlagernd_Flaeche TID="203311a1-63d9-4798-bbb8-812dc71337a8">
+        <Typ_Ueberlagernd_Flaeche REF="948245da-4a12-4964-a9f6-4cf9ad772643"/>
+      </SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche>
+      <SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche TID="0f32f55f-837c-463b-8b04-0e6d295329aa">
         <Geometrie>
           <SURFACE>
             <BOUNDARY>
@@ -187,8 +187,8 @@
         <Bemerkungen>Mittelalterliche Burg mit Graben</Bemerkungen>
         <Erfasser>ADA</Erfasser>
         <Datum>2016-11-12</Datum>
-        <Typ_Ueberlagernd_Flaeche REF="6ec56e29-45c1-4082-8992-ad825b8d9d47"/>
-      </SO_Nutzungsplanung_20170901.Nutzungsplanung.Ueberlagernd_Flaeche>
-    </SO_Nutzungsplanung_20170901.Nutzungsplanung>
+        <Typ_Ueberlagernd_Flaeche REF="948245da-4a12-4964-a9f6-4cf9ad772643"/>
+      </SO_Nutzungsplanung_20170915.Nutzungsplanung.Ueberlagernd_Flaeche>
+    </SO_Nutzungsplanung_20170915.Nutzungsplanung>
   </DATASECTION>
 </TRANSFER>

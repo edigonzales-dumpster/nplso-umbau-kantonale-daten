@@ -1,3 +1,5 @@
+java -jar ../Apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170901 --dbschema arp_npl_export --schemaimport
+
 java -jar ../Apps/ili2pg-3.9.1/ili2pg.jar --dbhost geodb-dev.cgjofbdf5rqg.eu-central-1.rds.amazonaws.com --dbdatabase xanadu2 --dbusr stefan --dbpwd ziegler12 --nameByTopic --disableValidation --defaultSrsCode 2056 --createBasketCol --createDatasetCol --sqlEnableNull --createGeomIdx --models SO_Nutzungsplanung_20170105 --dbschema arp_npl_basket_test --dataset foo --import roh_20170717A.xtf
 
 
