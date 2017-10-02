@@ -1,4 +1,4 @@
-# nplso-umbau-gewaesserschutz
+# nplso-umbau-kantonale-daten
 
 Verschiedene kantonale Daten sind Inhalt der Nutzungsplanung (im Sinne von Bauzonenplan, Gesamteplan, ...). Während des Relaunches des NPLSO-Projektes wurde beschlossen, dass diese kantonalen Daten aus der internen Geodatenbank in das Nutzungsplanungsmodell kopiert/transformiert werden und als "Starterkit" dem Erfassungsbüro abgegeben wird. Im technisch einfachsten Fall kann das Büro das XTF importieren und die kommunale Nutzungsplanung erfassen.
 
