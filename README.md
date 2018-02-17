@@ -46,5 +46,5 @@ In Zukunft kann auch der ili2pg-Export mit GRETL erledigt werden.
 
 ## TODO
 
-* Integration in AGI-Produktionsumgebung
+* Integration in AGI-Produktionsumgebung (Tickets für Schema-Anlegen sind gemacht)
 * ili2db-Tasks anstelle von Kommandozeile
